@@ -1,11 +1,7 @@
 ﻿using EntityFramework.Exceptions.Sqlite;
 using Microsoft.Data.Sqlite;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 using SQLitePCL;
 using System.Runtime.InteropServices;
-using System.Threading.Tasks;
-using Xunit;
 
 namespace EntityFramework.Exceptions.Tests
 {

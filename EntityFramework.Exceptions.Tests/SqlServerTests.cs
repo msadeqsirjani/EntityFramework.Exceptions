@@ -1,9 +1,4 @@
 ﻿using EntityFramework.Exceptions.SqlServer;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using System;
-using System.Threading.Tasks;
-using Xunit;
 
 namespace EntityFramework.Exceptions.Tests;
 

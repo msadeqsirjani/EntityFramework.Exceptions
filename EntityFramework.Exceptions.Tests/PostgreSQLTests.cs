@@ -1,8 +1,4 @@
 ﻿using EntityFramework.Exceptions.PostgreSQL;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using System;
-using Xunit;
 
 namespace EntityFramework.Exceptions.Tests
 {

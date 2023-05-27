@@ -1,8 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using System;
-
-namespace EntityFramework.Exceptions.Tests;
+﻿namespace EntityFramework.Exceptions.Tests;
 
 public abstract class DemoContextFixture : IDisposable
 {

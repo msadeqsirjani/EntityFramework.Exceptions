@@ -1,10 +1,6 @@
-using EntityFramework.Exceptions.Common;
-using Microsoft.EntityFrameworkCore;
-using Oracle.ManagedDataAccess.Client;
-
 namespace EntityFramework.Exceptions.Oracle;
 
-class OracleExceptionProcessorInterceptor : ExceptionProcessorInterceptor<OracleException>
+public class OracleExceptionProcessorInterceptor : ExceptionProcessorInterceptor<OracleException>
 {
     private const int CannotInsertNull = 1400;
     private const int UniqueConstraintViolation = 1;
@@ -25,19 +21,5 @@ class OracleExceptionProcessorInterceptor : ExceptionProcessorInterceptor<Oracle
             UniqueConstraintViolation => DatabaseError.UniqueConstraint,
             _ => null
         };
-    }
-}
-    
-public static class ExceptionProcessorExtensions
-{
-    public static DbContextOptionsBuilder UseExceptionProcessor(this DbContextOptionsBuilder self)
-    {
-        return self.AddInterceptors(new OracleExceptionProcessorInterceptor());
-    }
-
-    public static DbContextOptionsBuilder<TContext> UseExceptionProcessor<TContext>(this DbContextOptionsBuilder<TContext> self)
-        where TContext : DbContext
-    {
-        return self.AddInterceptors(new OracleExceptionProcessorInterceptor());
     }
 }

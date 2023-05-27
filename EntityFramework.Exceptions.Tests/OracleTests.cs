@@ -1,8 +1,4 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using EntityFramework.Exceptions.Oracle;
-using Xunit;
+﻿using EntityFramework.Exceptions.Oracle;
 
 namespace EntityFramework.Exceptions.Tests;
 

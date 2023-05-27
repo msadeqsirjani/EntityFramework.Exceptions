@@ -1,4 +1,4 @@
-﻿namespace EntityFramework.Exceptions.Common;
+﻿namespace EntityFramework.Exceptions.Common.Exceptions;
 
 public class UniqueConstraintException : DbUpdateException
 {

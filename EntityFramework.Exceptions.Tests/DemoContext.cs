@@ -1,7 +1,4 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore;
-
-namespace EntityFramework.Exceptions.Tests;
+﻿namespace EntityFramework.Exceptions.Tests;
 
 public class DemoContext : DbContext
 {

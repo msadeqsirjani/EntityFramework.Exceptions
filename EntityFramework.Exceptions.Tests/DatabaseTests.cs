@@ -1,22 +1,14 @@
-﻿using EntityFramework.Exceptions.Common;
-using Microsoft.EntityFrameworkCore;
-using System;
-using System.Data;
-using System.Threading.Tasks;
-using MySql.EntityFrameworkCore.Extensions;
-using Xunit;
-
-namespace EntityFramework.Exceptions.Tests;
+﻿namespace EntityFramework.Exceptions.Tests;
 
 public abstract class DatabaseTests : IDisposable
 {
-    private readonly bool isMySql;
+    private readonly bool _isMySql;
     internal DemoContext Context { get; }
 
     protected DatabaseTests(DemoContext context)
     {
         Context = context;
-        isMySql = MySqlDatabaseFacadeExtensions.IsMySql(Context.Database) || MySQLDatabaseFacadeExtensions.IsMySql(Context.Database);
+        _isMySql = MySqlDatabaseFacadeExtensions.IsMySql(Context.Database) || MySQLDatabaseFacadeExtensions.IsMySql(Context.Database);
     }
 
     [Fact]
@@ -36,7 +28,7 @@ public abstract class DatabaseTests : IDisposable
         var product2 = new Product { Name = "GD", Id = 42 };
 
         Context.Products.Add(product1);
-        Context.SaveChanges();
+        await Context.SaveChangesAsync();
 
         CleanupContext();
 
@@ -90,7 +82,7 @@ public abstract class DatabaseTests : IDisposable
         Context.Products.Add(product);
 
         Context.SaveChanges();
-        Context.Database.ExecuteSqlInterpolated(isMySql
+        Context.Database.ExecuteSqlInterpolated(_isMySql
             ? $"Delete from products where id={product.Id}"
             : (FormattableString)$"Delete from \"Products\" where \"Id\"={product.Id}");
         product.Name = "G";
@@ -121,7 +113,7 @@ public abstract class DatabaseTests : IDisposable
     {
         Context.Customers.Add(new Customer { Fullname = "Test" });
 
-        await Context.Database.ExecuteSqlRawAsync(isMySql ? "Drop table customers" : "Drop table \"Customers\"");
+        await Context.Database.ExecuteSqlRawAsync(_isMySql ? "Drop table customers" : "Drop table \"Customers\"");
 
         Assert.Throws<DbUpdateException>(() => Context.SaveChanges());
         await Assert.ThrowsAsync<DbUpdateException>(() => Context.SaveChangesAsync());

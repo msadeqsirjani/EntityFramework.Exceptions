@@ -1,10 +1,6 @@
-﻿using EntityFramework.Exceptions.Common;
-using Microsoft.Data.SqlClient;
-using Microsoft.EntityFrameworkCore;
+﻿namespace EntityFramework.Exceptions.SqlServer;
 
-namespace EntityFramework.Exceptions.SqlServer;
-
-class SqlServerExceptionProcessorInterceptor: ExceptionProcessorInterceptor<SqlException>
+public class SqlServerExceptionProcessorInterceptor: ExceptionProcessorInterceptor<SqlException>
 {
     private const int ReferenceConstraint = 547;
     private const int CannotInsertNull = 515;
@@ -29,18 +25,5 @@ class SqlServerExceptionProcessorInterceptor: ExceptionProcessorInterceptor<SqlE
             StringOrBinaryDataWouldBeTruncated2019 => DatabaseError.MaxLength,
             _ => null
         };
-    }
-}
-
-public static class ExceptionProcessorExtensions
-{
-    public static DbContextOptionsBuilder UseExceptionProcessor(this DbContextOptionsBuilder self)
-    {
-        return self.AddInterceptors(new SqlServerExceptionProcessorInterceptor());
-    }
-
-    public static DbContextOptionsBuilder<TContext> UseExceptionProcessor<TContext>(this DbContextOptionsBuilder<TContext> self) where TContext : DbContext
-    {
-        return self.AddInterceptors(new SqlServerExceptionProcessorInterceptor());
     }
 }

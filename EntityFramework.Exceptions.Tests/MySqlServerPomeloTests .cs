@@ -1,7 +1,4 @@
 ﻿using EntityFramework.Exceptions.MySQL.Pomelo;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using Xunit;
 
 namespace EntityFramework.Exceptions.Tests;
 

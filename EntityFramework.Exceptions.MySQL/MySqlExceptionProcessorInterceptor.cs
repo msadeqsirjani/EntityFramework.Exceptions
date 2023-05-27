@@ -1,8 +1,5 @@
-﻿using System;
+﻿#if POMELO
 using EntityFramework.Exceptions.Common;
-using Microsoft.EntityFrameworkCore;
-
-#if POMELO
 using MySqlConnector;
 namespace EntityFramework.Exceptions.MySQL.Pomelo;
 #else
@@ -10,7 +7,7 @@ using MySql.Data.MySqlClient;
 namespace EntityFramework.Exceptions.MySQL;
 #endif
 
-class MySqlExceptionProcessorInterceptor : ExceptionProcessorInterceptor<MySqlException>
+public class MySqlExceptionProcessorInterceptor : ExceptionProcessorInterceptor<MySqlException>
 {
     protected override DatabaseError? GetDatabaseError(MySqlException dbException)
     {
@@ -31,18 +28,5 @@ class MySqlExceptionProcessorInterceptor : ExceptionProcessorInterceptor<MySqlEx
             MySqlErrorCode.RowIsReferenced2 => DatabaseError.ReferenceConstraint,
             _ => null
         };
-    }
-}
-
-public static class ExceptionProcessorExtensions
-{
-    public static DbContextOptionsBuilder UseExceptionProcessor(this DbContextOptionsBuilder self)
-    {
-        return self.AddInterceptors(new MySqlExceptionProcessorInterceptor());
-    }
-
-    public static DbContextOptionsBuilder<TContext> UseExceptionProcessor<TContext>(this DbContextOptionsBuilder<TContext> self) where TContext : DbContext
-    {
-        return self.AddInterceptors(new MySqlExceptionProcessorInterceptor());
     }
 }

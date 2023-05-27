@@ -6,6 +6,7 @@ global using System.Data.Common;
 global using System.Runtime.Serialization;
 global using System.Threading;
 global using System.Threading.Tasks;
+global using EntityFramework.Exceptions.Common.Exceptions;
 global using Microsoft.EntityFrameworkCore;
 global using Microsoft.EntityFrameworkCore.ChangeTracking;
 global using Microsoft.EntityFrameworkCore.Diagnostics;
