@@ -1,0 +1,43 @@
+version: 6.0.{build}
+image: Visual Studio 2022
+environment:
+  ASPNETCORE_ENVIRONMENT: Appveyor
+  JAVA_HOME: C:\Program Files\Java\jdk15
+  COVERALLS_REPO_TOKEN:
+    secure: HS3I62bo7GH5+22WHl7WEmdKrUjmrDl0OFuCJo8fitWH6y/MY8d6NIqUgSHqfPal
+  SONAR_TOKEN:
+    secure: vLE/BPEfei+Li0PjsVhpsL6Bj5nRTP2J4FpaEldGgqBTNCrtmUf34VS4na2Ogmyj
+  Oracle:
+    secure: /QKDU4pyBwXUyDiNsShUqWGzP88KlDZG1azSIH6R2aC+rDrDPM2SO2i4pp/rfHxlV/4LjXCTkc4x5k94d2KQU3OxpM9RbMuxQV3Xa/dkw0UE94xIGjthPcRRVdzmjF2SNjvWG7WwQ/oMXsOvsT9u9ewrPdU89n7Gwl9cn6nBYOiEHnvABYD9NH2aKc4W5hEC3XJurXSLl1fYrt+uFmoGg6N71Scvt7RpAu3QxECVTLMvwyDXD5XBTb8busr62SaU+JA8vpbRgx9W7/70eXtilMbNohIfCSzYYk3y4AE+E3K4gfRG52yjXavDkkNDLLQPdBeConBt8ooGoNLMJaKxz7VjtZFRcU7l94avVfTKDM0VO0EErvke3aX2VCYlTFUrtX9w6TiVs0onU5vIKKK/2g==
+services:
+- mssql2017
+- postgresql101
+- mysql
+before_build:
+- cmd: >-
+
+    nuget restore
+
+    dotnet tool install coveralls.net --tool-path tools
+
+    dotnet tool install dotnet-reportgenerator-globaltool --tool-path tools
+
+    dotnet tool install dotnet-sonarscanner --tool-path tools
+
+    "tools\dotnet-sonarscanner" begin /k:"EntityFramework.Exceptions" /o:"giorgi" /d:sonar.login="%SONAR_TOKEN%" /d:sonar.host.url=https://sonarcloud.io /d:"sonar.cs.opencover.reportsPaths=**/*.opencover.xml" /d:"sonar.cs.vstest.reportsPaths=**/*.trx"
+build:
+  parallel: true
+  verbosity: minimal
+test_script:
+- cmd: dotnet test --logger trx "EntityFramework.Exceptions.Tests\Tests.csproj" /p:CollectCoverage=true /p:CoverletOutput=TestResults/ /p:CoverletOutputFormat=opencover /p:Exclude="[*]EntityFramework.Exceptions.Common.*Exception"
+
+after_test:
+- cmd: >-
+    "tools\csmacnz.coveralls.exe" --opencover -i "EntityFramework.Exceptions.Tests\TestResults\coverage.opencover.xml" --repoToken %COVERALLS_REPO_TOKEN%
+    
+    "tools\reportgenerator" "-reports:EntityFramework.Exceptions.Tests\TestResults\coverage.opencover.xml" "-targetdir:EntityFramework.Exceptions.Tests\TestResults" -reporttypes:Html
+
+    "tools\dotnet-sonarscanner" end /d:sonar.login="0c265007ce2b2184cd222f66489f567e0b059260"
+
+artifacts:
+  - path: EntityFramework.Exceptions.Tests\TestResults
